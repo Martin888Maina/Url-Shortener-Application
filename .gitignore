@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# environment
+.env
+.env.local
+.env.development
+.env.production
+
+# build output
+dist/
+build/
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# claude / docs (kept local only)
+.claude/
