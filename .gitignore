@@ -22,3 +22,4 @@ npm-debug.log*
 
 # claude / docs (kept local only)
 .claude/
+DEPLOY_TO_DIGITAL_OCEAN.md
