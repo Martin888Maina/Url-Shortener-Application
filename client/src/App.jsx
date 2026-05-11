@@ -1,4 +1,44 @@
+import { useCallback, useEffect, useState } from 'react';
+import URLForm from './components/URLForm';
+import URLList from './components/URLList';
+import UsageGuide from './components/UsageGuide';
+import { deleteUrl, listUrls } from './api/urls';
+
 function App() {
+  const [urls, setUrls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const rows = await listUrls();
+      setUrls(rows || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  function handleCreated(row) {
+    setUrls((prev) => [row, ...prev]);
+  }
+
+  async function handleDelete(id) {
+    try {
+      await deleteUrl(id);
+      setUrls((prev) => prev.filter((u) => u.id !== id));
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -13,9 +53,14 @@ function App() {
       </header>
 
       <main className="app-main">
-        <div className="placeholder">
-          Form and history will appear here in the next phase.
-        </div>
+        <URLForm onCreated={handleCreated} />
+        <URLList
+          urls={urls}
+          loading={loading}
+          error={error}
+          onDelete={handleDelete}
+        />
+        <UsageGuide />
       </main>
 
       <footer className="app-footer">
