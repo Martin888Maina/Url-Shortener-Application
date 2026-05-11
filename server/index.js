@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const pool = require('./db/pool');
+const urlsRouter = require('./routes/urls');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,6 +30,8 @@ app.get('/api/health', async (_req, res) => {
     res.status(500).json({ ok: false, db: 'disconnected', error: err.message });
   }
 });
+
+app.use('/api/urls', urlsRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });
